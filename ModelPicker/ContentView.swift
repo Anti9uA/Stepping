@@ -10,6 +10,7 @@ import SwiftUI
 import FocusEntity
 import RealityKit
 import ARKit
+import RealityUI
 
 // Main content view
 struct ContentView : View {
@@ -56,18 +57,83 @@ struct ARViewContainer: UIViewRepresentable {
         
         let arView = CustomARView(frame: .zero)
         
+    // ---------------------------------------------------------
+        RealityUI.enableGestures(.all, on: arView)
+        
+//        let testAnchor = AnchorEntity(world: [0, 0, -1])
+//
+//        let clickySphere = ClickyEntity(
+//          model: ModelComponent(mesh: .generateBox(size: 0.2), materials: [SimpleMaterial(color: .red, isMetallic: false)])
+//        ) {
+//            (clickedObj, atPosition) in
+//            // In this example we're just assigning the colour of the clickable
+//            // entity model to a green SimpleMaterial.
+//            (clickedObj as? HasModel)?.model?.materials = [
+//                SimpleMaterial(color: .green, isMetallic: false)
+//            ]
+//            print("testing 1 2 3")
+//
+//
+//        }
+
+//        testAnchor.addChild(clickySphere)
+//        arView.scene.addAnchor(testAnchor)
+    // ---------------------------------------------------------
+        
         return arView
     }
     
     func updateUIView(_ uiView: ARView, context: Context) {
+        
+        let testAnchor = AnchorEntity(world: [0, 0, -1])
+        if let model2 = self.modelConfirmedForPlacement {
+            if let modelEn2 = model2.modelEntity {
+                let clicky = ClickyEntity(model: modelEn2.model!) {
+                    (clickedObj, atPosition) in
+                    // In this example we're just assigning the colour of the clickable
+                    // entity model to a green SimpleMaterial.
+                    (clickedObj as? HasModel)?.model?.materials = [
+                        SimpleMaterial(color: .green, isMetallic: false)
+                    ]
+                    print("testing 3 2 1")
+                }
+                testAnchor.addChild(clicky)
+                uiView.scene.addAnchor(testAnchor)
+            }
+        }
+        
+//        let clickySphere = ClickyEntity(
+//          model: ModelComponent(mesh: .generateBox(size: 0.2), materials: [SimpleMaterial(color: .red, isMetallic: false)])
+//        ) {
+//            (clickedObj, atPosition) in
+//            // In this example we're just assigning the colour of the clickable
+//            // entity model to a green SimpleMaterial.
+//            (clickedObj as? HasModel)?.model?.materials = [
+//                SimpleMaterial(color: .green, isMetallic: false)
+//            ]
+//            print("testing 1 2 3")
+//
+//
+//        }
+//
+//        testAnchor.addChild(clickySphere)
+//        uiView.scene.addAnchor(testAnchor)
+        
+        
         if let model = self.modelConfirmedForPlacement {
             if let modelEntity = model.modelEntity {
                 print("DEBUG - adding model to scene: \(model.modelName)")
                 
                 let anchorEntity = AnchorEntity(plane: .any)
+                
                 anchorEntity.addChild(modelEntity.clone(recursive: true))
                 
+                
                 uiView.scene.addAnchor(anchorEntity)
+                
+                
+//                uiView.installGestures([.all], for: modelEntity as Entity & HasCollision)
+                
             } else {
                 print("DEBUG - unable to load modelEntity for: \(model.modelName)")
             }
@@ -79,6 +145,8 @@ struct ARViewContainer: UIViewRepresentable {
     }
     
 }
+
+
 
 // Custom ARView with FocusEntity
 class CustomARView: ARView {
@@ -195,6 +263,8 @@ struct PlacementButtonsView: View {
         self.selectedModel = nil
     }
 }
+
+
 
 #if DEBUG
 struct ContentView_Previews : PreviewProvider {

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20B9051629389E4500D2243F /* framefoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 20B9051529389E4500D2243F /* framefoot.usdz */; };
+		20B90518293906F200D2243F /* ARViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B90517293906F200D2243F /* ARViewExtension.swift */; };
+		20B9053729392D9900D2243F /* RealityUI in Frameworks */ = {isa = PBXBuildFile; productRef = 20B9053629392D9900D2243F /* RealityUI */; };
 		57047B2F269DFD6100DBDE5A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57047B2E269DFD6100DBDE5A /* AppDelegate.swift */; };
 		57047B31269DFD6100DBDE5A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57047B30269DFD6100DBDE5A /* ContentView.swift */; };
 		57047B35269DFD6200DBDE5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57047B34269DFD6200DBDE5A /* Assets.xcassets */; };
@@ -40,6 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		20B9051529389E4500D2243F /* framefoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = framefoot.usdz; sourceTree = "<group>"; };
+		20B90517293906F200D2243F /* ARViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewExtension.swift; sourceTree = "<group>"; };
 		57047B2B269DFD6100DBDE5A /* ModelPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModelPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57047B2E269DFD6100DBDE5A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57047B30269DFD6100DBDE5A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -66,6 +71,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				572764B826A101870037D58E /* FocusEntity in Frameworks */,
+				20B9053729392D9900D2243F /* RealityUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,6 +123,7 @@
 				57047B39269DFD6200DBDE5A /* LaunchScreen.storyboard */,
 				57047B3C269DFD6200DBDE5A /* Info.plist */,
 				57047B36269DFD6200DBDE5A /* Preview Content */,
+				20B90517293906F200D2243F /* ARViewExtension.swift */,
 			);
 			path = ModelPicker;
 			sourceTree = "<group>";
@@ -150,6 +157,7 @@
 		57047B5E269DFFF200DBDE5A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				20B9051529389E4500D2243F /* framefoot.usdz */,
 				57047B61269E007000DBDE5A /* fender_stratocaster.usdz */,
 				57047B5F269E007000DBDE5A /* teapot.usdz */,
 				57047B60269E007000DBDE5A /* toy_biplane.usdz */,
@@ -176,6 +184,7 @@
 			name = ModelPicker;
 			packageProductDependencies = (
 				572764B726A101870037D58E /* FocusEntity */,
+				20B9053629392D9900D2243F /* RealityUI */,
 			);
 			productName = ModelPicker;
 			productReference = 57047B2B269DFD6100DBDE5A /* ModelPicker.app */;
@@ -250,6 +259,7 @@
 			mainGroup = 57047B22269DFD6100DBDE5A;
 			packageReferences = (
 				572764B626A101870037D58E /* XCRemoteSwiftPackageReference "FocusEntity" */,
+				20B9053529392D9900D2243F /* XCRemoteSwiftPackageReference "RealityUI" */,
 			);
 			productRefGroup = 57047B2C269DFD6100DBDE5A /* Products */;
 			projectDirPath = "";
@@ -272,6 +282,7 @@
 				57047B65269E007100DBDE5A /* fender_stratocaster.usdz in Resources */,
 				57047B3B269DFD6200DBDE5A /* LaunchScreen.storyboard in Resources */,
 				57047B38269DFD6200DBDE5A /* Preview Assets.xcassets in Resources */,
+				20B9051629389E4500D2243F /* framefoot.usdz in Resources */,
 				57047B35269DFD6200DBDE5A /* Assets.xcassets in Resources */,
 				57047B66269E007100DBDE5A /* toy_robot_vintage.usdz in Resources */,
 			);
@@ -301,6 +312,7 @@
 				57047B68269EB3E500DBDE5A /* Model.swift in Sources */,
 				57047B31269DFD6100DBDE5A /* ContentView.swift in Sources */,
 				57047B2F269DFD6100DBDE5A /* AppDelegate.swift in Sources */,
+				20B90518293906F200D2243F /* ARViewExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,7 +482,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ModelPicker/Preview Content\"";
-				DEVELOPMENT_TEAM = VWVKRMK664;
+				DEVELOPMENT_TEAM = Y6P5ZFWBM8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ModelPicker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -491,7 +503,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ModelPicker/Preview Content\"";
-				DEVELOPMENT_TEAM = VWVKRMK664;
+				DEVELOPMENT_TEAM = Y6P5ZFWBM8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ModelPicker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -631,6 +643,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		20B9053529392D9900D2243F /* XCRemoteSwiftPackageReference "RealityUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/maxxfrazer/RealityUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		572764B626A101870037D58E /* XCRemoteSwiftPackageReference "FocusEntity" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/maxxfrazer/FocusEntity";
@@ -642,6 +662,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		20B9053629392D9900D2243F /* RealityUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 20B9053529392D9900D2243F /* XCRemoteSwiftPackageReference "RealityUI" */;
+			productName = RealityUI;
+		};
 		572764B726A101870037D58E /* FocusEntity */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 572764B626A101870037D58E /* XCRemoteSwiftPackageReference "FocusEntity" */;
