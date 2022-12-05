@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		201F8FB4293E3D4D00CBD404 /* birdFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FAC293E3D4D00CBD404 /* birdFoot.usdz */; };
-		201F8FB5293E3D4D00CBD404 /* horseFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FAD293E3D4D00CBD404 /* horseFoot.usdz */; };
-		201F8FB6293E3D4D00CBD404 /* rightFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FAE293E3D4D00CBD404 /* rightFoot.usdz */; };
-		201F8FB8293E3D4D00CBD404 /* leftFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FB0293E3D4D00CBD404 /* leftFoot.usdz */; };
-		201F8FBB293E3D4D00CBD404 /* duckFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FB3293E3D4D00CBD404 /* duckFoot.usdz */; };
-		201F8FC0293E3E9A00CBD404 /* bearFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FBC293E3E9A00CBD404 /* bearFoot.usdz */; };
-		201F8FC2293E3E9A00CBD404 /* dogFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FBE293E3E9A00CBD404 /* dogFoot.usdz */; };
-		201F8FC5293E3EC500CBD404 /* catFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FC4293E3EC500CBD404 /* catFoot.usdz */; };
 		201F8FC7293E3F4B00CBD404 /* mark.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FC6293E3F4B00CBD404 /* mark.usdz */; };
+		201F8FCE293E438800CBD404 /* rightFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FC8293E438800CBD404 /* rightFoot.usdz */; };
+		201F8FCF293E438800CBD404 /* dogFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FC9293E438800CBD404 /* dogFoot.usdz */; };
+		201F8FD0293E438800CBD404 /* birdFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FCA293E438800CBD404 /* birdFoot.usdz */; };
+		201F8FD1293E438800CBD404 /* duckFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FCB293E438800CBD404 /* duckFoot.usdz */; };
+		201F8FD2293E438800CBD404 /* leftFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FCC293E438800CBD404 /* leftFoot.usdz */; };
+		201F8FD3293E438800CBD404 /* catFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FCD293E438800CBD404 /* catFoot.usdz */; };
+		201F8FD6293E43A400CBD404 /* bearFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FD4293E43A400CBD404 /* bearFoot.usdz */; };
+		201F8FD7293E43A400CBD404 /* horseFoot.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 201F8FD5293E43A400CBD404 /* horseFoot.usdz */; };
 		20B90518293906F200D2243F /* ARViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B90517293906F200D2243F /* ARViewExtension.swift */; };
 		20B9053729392D9900D2243F /* RealityUI in Frameworks */ = {isa = PBXBuildFile; productRef = 20B9053629392D9900D2243F /* RealityUI */; };
 		20F1F011293A22DD00342A95 /* SampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F1F010293A22DD00342A95 /* SampleView.swift */; };
@@ -49,15 +49,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		201F8FAC293E3D4D00CBD404 /* birdFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = birdFoot.usdz; sourceTree = "<group>"; };
-		201F8FAD293E3D4D00CBD404 /* horseFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = horseFoot.usdz; sourceTree = "<group>"; };
-		201F8FAE293E3D4D00CBD404 /* rightFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = rightFoot.usdz; sourceTree = "<group>"; };
-		201F8FB0293E3D4D00CBD404 /* leftFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = leftFoot.usdz; sourceTree = "<group>"; };
-		201F8FB3293E3D4D00CBD404 /* duckFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = duckFoot.usdz; sourceTree = "<group>"; };
-		201F8FBC293E3E9A00CBD404 /* bearFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = bearFoot.usdz; sourceTree = "<group>"; };
-		201F8FBE293E3E9A00CBD404 /* dogFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dogFoot.usdz; sourceTree = "<group>"; };
-		201F8FC4293E3EC500CBD404 /* catFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = catFoot.usdz; sourceTree = "<group>"; };
 		201F8FC6293E3F4B00CBD404 /* mark.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = mark.usdz; sourceTree = "<group>"; };
+		201F8FC8293E438800CBD404 /* rightFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = rightFoot.usdz; sourceTree = "<group>"; };
+		201F8FC9293E438800CBD404 /* dogFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dogFoot.usdz; sourceTree = "<group>"; };
+		201F8FCA293E438800CBD404 /* birdFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = birdFoot.usdz; sourceTree = "<group>"; };
+		201F8FCB293E438800CBD404 /* duckFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = duckFoot.usdz; sourceTree = "<group>"; };
+		201F8FCC293E438800CBD404 /* leftFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = leftFoot.usdz; sourceTree = "<group>"; };
+		201F8FCD293E438800CBD404 /* catFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = catFoot.usdz; sourceTree = "<group>"; };
+		201F8FD4293E43A400CBD404 /* bearFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = bearFoot.usdz; sourceTree = "<group>"; };
+		201F8FD5293E43A400CBD404 /* horseFoot.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = horseFoot.usdz; sourceTree = "<group>"; };
 		20B90517293906F200D2243F /* ARViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewExtension.swift; sourceTree = "<group>"; };
 		20F1F010293A22DD00342A95 /* SampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleView.swift; sourceTree = "<group>"; };
 		20F1F012293A2A6100342A95 /* StoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryViewController.swift; sourceTree = "<group>"; };
@@ -172,14 +172,14 @@
 			isa = PBXGroup;
 			children = (
 				201F8FC6293E3F4B00CBD404 /* mark.usdz */,
-				201F8FC4293E3EC500CBD404 /* catFoot.usdz */,
-				201F8FBC293E3E9A00CBD404 /* bearFoot.usdz */,
-				201F8FBE293E3E9A00CBD404 /* dogFoot.usdz */,
-				201F8FAC293E3D4D00CBD404 /* birdFoot.usdz */,
-				201F8FB3293E3D4D00CBD404 /* duckFoot.usdz */,
-				201F8FAD293E3D4D00CBD404 /* horseFoot.usdz */,
-				201F8FB0293E3D4D00CBD404 /* leftFoot.usdz */,
-				201F8FAE293E3D4D00CBD404 /* rightFoot.usdz */,
+				201F8FD4293E43A400CBD404 /* bearFoot.usdz */,
+				201F8FD5293E43A400CBD404 /* horseFoot.usdz */,
+				201F8FCA293E438800CBD404 /* birdFoot.usdz */,
+				201F8FCD293E438800CBD404 /* catFoot.usdz */,
+				201F8FC9293E438800CBD404 /* dogFoot.usdz */,
+				201F8FCB293E438800CBD404 /* duckFoot.usdz */,
+				201F8FCC293E438800CBD404 /* leftFoot.usdz */,
+				201F8FC8293E438800CBD404 /* rightFoot.usdz */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -295,18 +295,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				201F8FD6293E43A400CBD404 /* bearFoot.usdz in Resources */,
+				201F8FD1293E438800CBD404 /* duckFoot.usdz in Resources */,
+				201F8FCF293E438800CBD404 /* dogFoot.usdz in Resources */,
 				201F8FC7293E3F4B00CBD404 /* mark.usdz in Resources */,
-				201F8FC5293E3EC500CBD404 /* catFoot.usdz in Resources */,
-				201F8FC2293E3E9A00CBD404 /* dogFoot.usdz in Resources */,
-				201F8FC0293E3E9A00CBD404 /* bearFoot.usdz in Resources */,
 				57047B3B269DFD6200DBDE5A /* LaunchScreen.storyboard in Resources */,
+				201F8FD0293E438800CBD404 /* birdFoot.usdz in Resources */,
+				201F8FCE293E438800CBD404 /* rightFoot.usdz in Resources */,
+				201F8FD3293E438800CBD404 /* catFoot.usdz in Resources */,
+				201F8FD2293E438800CBD404 /* leftFoot.usdz in Resources */,
 				57047B38269DFD6200DBDE5A /* Preview Assets.xcassets in Resources */,
-				201F8FBB293E3D4D00CBD404 /* duckFoot.usdz in Resources */,
-				201F8FB5293E3D4D00CBD404 /* horseFoot.usdz in Resources */,
-				201F8FB8293E3D4D00CBD404 /* leftFoot.usdz in Resources */,
-				201F8FB4293E3D4D00CBD404 /* birdFoot.usdz in Resources */,
-				201F8FB6293E3D4D00CBD404 /* rightFoot.usdz in Resources */,
 				57047B35269DFD6200DBDE5A /* Assets.xcassets in Resources */,
+				201F8FD7293E43A400CBD404 /* horseFoot.usdz in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

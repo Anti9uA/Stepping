@@ -38,6 +38,8 @@ let backupModel = models
 struct ContentView : View {
     @State private var isPlacementEnabled = false
     @State private var selectedModel: Model?
+    @State private var isSetPosition = false
+    @State private var isContinue = false
     @State private var modelConfirmedForPlacement: Model?
     @State private var isShowSheet = false
     @State private var backups = backupModel
@@ -49,11 +51,21 @@ struct ContentView : View {
                     SampleView(selectedModel: $selectedModel, backupModel: $backups)
                 }
             
+            if !self.isSetPosition {
+                EmptyButtonsView(isSetPosition: $isSetPosition, selectedModel: $selectedModel, modelConfirmedForPlacement: $modelConfirmedForPlacement)
+            }
             
-            if self.isPlacementEnabled {
-                PlacementButtonsView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, modelConfirmedForPlacement: self.$modelConfirmedForPlacement)
-            } else {
-                ModelPickerView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, models: models)
+            else {
+                if !self.isContinue {
+                    startFootprintButton(isContinue: $isContinue)
+                }
+                else {
+                    if self.isPlacementEnabled && self.isSetPosition {
+                        PlacementButtonsView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, modelConfirmedForPlacement: self.$modelConfirmedForPlacement)
+                    } else {
+                        ModelPickerView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, models: models)
+                    }
+                }
             }
         }
     }
@@ -141,7 +153,7 @@ struct ARViewContainer: UIViewRepresentable {
                 zZ -= 0.2
                 count += 1
                 
-                if count >= backupModel.count - 1 {
+                if count >= 4 {
                         t.invalidate()
                 }
             }
@@ -198,6 +210,20 @@ extension CustomARView: FEDelegate {
     }
 }
 
+struct startFootprintButton: View {
+    @Binding var isContinue: Bool
+    var body: some View {
+        Button(action: {
+            self.isContinue = true
+        }) {
+            Text("+ 발자국 남기러 가기")
+                .foregroundColor(.white)
+                .padding()
+        }
+        .background(Capsule().stroke(lineWidth: 2))
+
+    }
+}
 
 // Picker UI
 struct ModelPickerView: View {
@@ -230,6 +256,36 @@ struct ModelPickerView: View {
         .background(Color.black.opacity(0.5))
     }
 }
+
+// Placement confirm/cancel UI
+struct EmptyButtonsView: View {
+    @Binding var isSetPosition: Bool
+    @Binding var selectedModel: Model?
+    @Binding var modelConfirmedForPlacement: Model?
+    
+    var body: some View {
+        HStack {
+            // Confirmation button
+            Button(action: {
+                print("DEBUG - confirm model placement")
+                self.modelConfirmedForPlacement = models.last
+                resetParameters()
+            }) {
+                Image(systemName: "checkmark")
+                    .frame(width: 50, height: 50)
+                    .font(.title)
+                    .background(Color.white.opacity(0.75))
+                    .cornerRadius(30)
+                    .padding(20)
+            }
+        }
+    }
+    func resetParameters() {
+        self.isSetPosition = true
+        // self.selectedModel = nil
+    }
+}
+
 
 // Placement confirm/cancel UI
 struct PlacementButtonsView: View {
