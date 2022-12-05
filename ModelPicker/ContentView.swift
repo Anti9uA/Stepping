@@ -41,39 +41,55 @@ struct ContentView : View {
     @State private var isSetPosition = false
     @State private var isContinue = false
     @State private var modelConfirmedForPlacement: Model?
+    @State private var stepFootprint: Model?
     @State private var isShowSheet = false
+    @State private var isShowStoryButton = false
     @State private var backups = backupModel
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            ARViewContainer(modelConfirmedForPlacement: self.$modelConfirmedForPlacement, isShowSheet: $isShowSheet)
+            ARViewContainer(modelConfirmedForPlacement: self.$modelConfirmedForPlacement, stepFootprint: $stepFootprint, isShowSheet: $isShowSheet)
                 .sheet(isPresented: $isShowSheet) {
                     SampleView(selectedModel: $selectedModel, backupModel: $backups)
                 }
             
             if !self.isSetPosition {
                 EmptyButtonsView(isSetPosition: $isSetPosition, selectedModel: $selectedModel, modelConfirmedForPlacement: $modelConfirmedForPlacement)
+                    .padding(.bottom, 40)
             }
             
             else {
                 if !self.isContinue {
                     startFootprintButton(isContinue: $isContinue)
+                    .padding(.bottom, 40)
                 }
                 else {
                     if self.isPlacementEnabled && self.isSetPosition {
-                        PlacementButtonsView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, modelConfirmedForPlacement: self.$modelConfirmedForPlacement)
-                    } else {
-                        ModelPickerView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, models: models)
+                        PlacementButtonsView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, modelConfirmedForPlacement: self.$stepFootprint, isShowStoryButton: $isShowStoryButton)
+                            .padding(.bottom, 40)
+                    }
+                    else {
+                        
+                        if self.isShowStoryButton {
+                            startStoryButton(isShowSheet: $isShowSheet)
+                            .padding(.bottom, 40)
+                        }
+                        else {
+                            ModelPickerView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, models: models)
+                                .padding(.bottom, 40)
+                        }
                     }
                 }
             }
         }
+        .ignoresSafeArea()
     }
 }
 
 // ARView container
 struct ARViewContainer: UIViewRepresentable {
     @Binding var modelConfirmedForPlacement: Model?
+    @Binding var stepFootprint: Model?
     @Binding var isShowSheet: Bool
     
     func makeUIView(context: Context) -> ARView {
@@ -161,7 +177,28 @@ struct ARViewContainer: UIViewRepresentable {
             DispatchQueue.main.async {
                 self.modelConfirmedForPlacement = nil
             }
+        }
+        
+        if let secondModel = self.stepFootprint {
+            if let secondEntity = secondModel.modelEntity {
+                print("DEBUG - adding model to scene: \(secondModel.modelName)")
+                let clicky = ClickyEntity(model: secondEntity.model!) {
+                    (clickedObj, atPosition) in
+                    // In this example we're just assigning the colour of the clickable
+                    // entity model to a green SimpleMaterial.
+                    print("hello hello")
+                    print(anchorEntity.position)
+                    
+                    self.isShowSheet.toggle()
+                    
+                }
+                anchorEntity.addChild(clicky)
+                uiView.scene.addAnchor(anchorEntity)
+            }
             
+            DispatchQueue.main.async {
+                self.stepFootprint = nil
+            }
         }
 
     }
@@ -217,6 +254,21 @@ struct startFootprintButton: View {
             self.isContinue = true
         }) {
             Text("+ 발자국 남기러 가기")
+                .foregroundColor(.white)
+                .padding()
+        }
+        .background(Capsule().stroke(lineWidth: 2))
+
+    }
+}
+
+struct startStoryButton: View {
+    @Binding var isShowSheet: Bool
+    var body: some View {
+        Button(action: {
+            self.isShowSheet.toggle()
+        }) {
+            Text("스토리 남기러 가기 ->")
                 .foregroundColor(.white)
                 .padding()
         }
@@ -292,6 +344,7 @@ struct PlacementButtonsView: View {
     @Binding var isPlacementEnabled: Bool
     @Binding var selectedModel: Model?
     @Binding var modelConfirmedForPlacement: Model?
+    @Binding var isShowStoryButton: Bool
     
     var body: some View {
         HStack {
@@ -312,7 +365,7 @@ struct PlacementButtonsView: View {
             Button(action: {
                 print("DEBUG - confirm model placement")
                 self.modelConfirmedForPlacement = self.selectedModel
-                self.resetParameters()
+                resetParameters()
             }) {
                 Image(systemName: "checkmark")
                     .frame(width: 50, height: 50)
@@ -326,7 +379,7 @@ struct PlacementButtonsView: View {
     
     func resetParameters() {
         self.isPlacementEnabled = false
-        // self.selectedModel = nil
+        self.isShowStoryButton = true
     }
 }
 
