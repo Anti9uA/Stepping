@@ -10,40 +10,50 @@ import SwiftUI
 import FocusEntity
 import RealityKit
 import ARKit
+import UIKit
 import RealityUI
+
+
+private var models: [Model] = {
+    // Dynamically get file names
+    let filemanager =  FileManager.default
+    
+    guard let path = Bundle.main.resourcePath, let files = try? filemanager.contentsOfDirectory(atPath: path) else {
+        return []
+    }
+    
+    var availableModels: [Model] = []
+    for filename in files where filename.hasSuffix("usdz") {
+        let modelName = filename.replacingOccurrences(of: ".usdz", with: "")
+        let model = Model(modelName: modelName)
+        availableModels.append(model)
+    }
+    
+    return availableModels
+}()
+
+let backupModel = models
 
 // Main content view
 struct ContentView : View {
     @State private var isPlacementEnabled = false
     @State private var selectedModel: Model?
     @State private var modelConfirmedForPlacement: Model?
-    
-    private var models: [Model] = {
-       // Dynamically get file names
-        let filemanager =  FileManager.default
-        
-        guard let path = Bundle.main.resourcePath, let files = try? filemanager.contentsOfDirectory(atPath: path) else {
-            return []
-        }
-        
-        var availableModels: [Model] = []
-        for filename in files where filename.hasSuffix("usdz") {
-            let modelName = filename.replacingOccurrences(of: ".usdz", with: "")
-            let model = Model(modelName: modelName)
-            availableModels.append(model)
-        }
-        
-        return availableModels
-    }()
+    @State private var isShowSheet = false
+    @State private var backups = backupModel
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            ARViewContainer(modelConfirmedForPlacement: self.$modelConfirmedForPlacement)
+            ARViewContainer(modelConfirmedForPlacement: self.$modelConfirmedForPlacement, isShowSheet: $isShowSheet)
+                .sheet(isPresented: $isShowSheet) {
+                    SampleView(selectedModel: $selectedModel, backupModel: $backups)
+                }
+            
             
             if self.isPlacementEnabled {
                 PlacementButtonsView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, modelConfirmedForPlacement: self.$modelConfirmedForPlacement)
             } else {
-                ModelPickerView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, models: self.models)
+                ModelPickerView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, models: models)
             }
         }
     }
@@ -52,96 +62,96 @@ struct ContentView : View {
 // ARView container
 struct ARViewContainer: UIViewRepresentable {
     @Binding var modelConfirmedForPlacement: Model?
+    @Binding var isShowSheet: Bool
     
     func makeUIView(context: Context) -> ARView {
         
         let arView = CustomARView(frame: .zero)
         
-    // ---------------------------------------------------------
+        // ---------------------------------------------------------
         RealityUI.enableGestures(.all, on: arView)
         
-//        let testAnchor = AnchorEntity(world: [0, 0, -1])
-//
-//        let clickySphere = ClickyEntity(
-//          model: ModelComponent(mesh: .generateBox(size: 0.2), materials: [SimpleMaterial(color: .red, isMetallic: false)])
-//        ) {
-//            (clickedObj, atPosition) in
-//            // In this example we're just assigning the colour of the clickable
-//            // entity model to a green SimpleMaterial.
-//            (clickedObj as? HasModel)?.model?.materials = [
-//                SimpleMaterial(color: .green, isMetallic: false)
-//            ]
-//            print("testing 1 2 3")
-//
-//
-//        }
-
-//        testAnchor.addChild(clickySphere)
-//        arView.scene.addAnchor(testAnchor)
-    // ---------------------------------------------------------
+        //        let testAnchor = AnchorEntity(world: [0, 0, -1])
+        //
+        //        let clickySphere = ClickyEntity(
+        //          model: ModelComponent(mesh: .generateBox(size: 0.2), materials: [SimpleMaterial(color: .red, isMetallic: false)])
+        //        ) {
+        //            (clickedObj, atPosition) in
+        //            // In this example we're just assigning the colour of the clickable
+        //            // entity model to a green SimpleMaterial.
+        //            (clickedObj as? HasModel)?.model?.materials = [
+        //                SimpleMaterial(color: .green, isMetallic: false)
+        //            ]
+        //            print("testing 1 2 3")
+        //
+        //
+        //        }
+        
+        //        testAnchor.addChild(clickySphere)
+        //        arView.scene.addAnchor(testAnchor)
+        // ---------------------------------------------------------
         
         return arView
     }
     
+    
     func updateUIView(_ uiView: ARView, context: Context) {
-        
-        let testAnchor = AnchorEntity(world: [0, 0, -1])
-        if let model2 = self.modelConfirmedForPlacement {
-            if let modelEn2 = model2.modelEntity {
-                let clicky = ClickyEntity(model: modelEn2.model!) {
-                    (clickedObj, atPosition) in
-                    // In this example we're just assigning the colour of the clickable
-                    // entity model to a green SimpleMaterial.
-                    (clickedObj as? HasModel)?.model?.materials = [
-                        SimpleMaterial(color: .green, isMetallic: false)
-                    ]
-                    print("testing 3 2 1")
-                }
-                testAnchor.addChild(clicky)
-                uiView.scene.addAnchor(testAnchor)
-            }
-        }
-        
-//        let clickySphere = ClickyEntity(
-//          model: ModelComponent(mesh: .generateBox(size: 0.2), materials: [SimpleMaterial(color: .red, isMetallic: false)])
-//        ) {
-//            (clickedObj, atPosition) in
-//            // In this example we're just assigning the colour of the clickable
-//            // entity model to a green SimpleMaterial.
-//            (clickedObj as? HasModel)?.model?.materials = [
-//                SimpleMaterial(color: .green, isMetallic: false)
-//            ]
-//            print("testing 1 2 3")
-//
-//
-//        }
-//
-//        testAnchor.addChild(clickySphere)
-//        uiView.scene.addAnchor(testAnchor)
-        
-        
+        let anchorEntity = AnchorEntity(plane: .any)
         if let model = self.modelConfirmedForPlacement {
             if let modelEntity = model.modelEntity {
                 print("DEBUG - adding model to scene: \(model.modelName)")
-                
-                let anchorEntity = AnchorEntity(plane: .any)
-                
-                anchorEntity.addChild(modelEntity.clone(recursive: true))
-                
-                
+                let clicky = ClickyEntity(model: modelEntity.model!) {
+                    (clickedObj, atPosition) in
+                    // In this example we're just assigning the colour of the clickable
+                    // entity model to a green SimpleMaterial.
+                    print("hello hello")
+                    print(anchorEntity.position)
+                    
+                    self.isShowSheet.toggle()
+                    
+                }
+                anchorEntity.addChild(clicky)
                 uiView.scene.addAnchor(anchorEntity)
+            }
+            
+            var xX: Float = -0.1
+            var zZ: Float = -0.1
+            
+            var count = 0
+            _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ t in
                 
+                let anchorEntity2 = AnchorEntity(plane: .any)
+                let model2 = backupModel[count]
+                if let modelEntity2 = model2.modelEntity {
+                    print("DEBUG - adding model to scene: \(model2.modelName)")
+                    let clicky2 = ClickyEntity(model: modelEntity2.model!) {
+                        (clickedObj, atPosition) in
+                        // In this example we're just assigning the colour of the clickable
+                        // entity model to a green SimpleMaterial.
+                        print("hello hello")
+                        print(anchorEntity.position)
+                        self.isShowSheet.toggle()
+                        
+                    }
+                    anchorEntity2.transform.translation = [xX, 0, zZ]
+                    anchorEntity2.addChild(clicky2)
+                    uiView.scene.addAnchor(anchorEntity2)
+                }
+                xX = (xX - 0.1) * -1
+                zZ -= 0.2
+                count += 1
                 
-//                uiView.installGestures([.all], for: modelEntity as Entity & HasCollision)
-                
-            } else {
-                print("DEBUG - unable to load modelEntity for: \(model.modelName)")
+                if count >= backupModel.count - 1 {
+                        t.invalidate()
+                }
             }
             
             DispatchQueue.main.async {
                 self.modelConfirmedForPlacement = nil
             }
+            
         }
+
     }
     
 }
@@ -260,10 +270,9 @@ struct PlacementButtonsView: View {
     
     func resetParameters() {
         self.isPlacementEnabled = false
-        self.selectedModel = nil
+        // self.selectedModel = nil
     }
 }
-
 
 
 #if DEBUG
