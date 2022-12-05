@@ -10,75 +10,202 @@ import SwiftUI
 import FocusEntity
 import RealityKit
 import ARKit
+import UIKit
+import RealityUI
+
+
+private var models: [Model] = {
+    // Dynamically get file names
+    let filemanager =  FileManager.default
+    
+    guard let path = Bundle.main.resourcePath, let files = try? filemanager.contentsOfDirectory(atPath: path) else {
+        return []
+    }
+    
+    var availableModels: [Model] = []
+    for filename in files where filename.hasSuffix("usdz") {
+        let modelName = filename.replacingOccurrences(of: ".usdz", with: "")
+        let model = Model(modelName: modelName)
+        availableModels.append(model)
+    }
+    
+    return availableModels
+}()
+
+let backupModel = models
 
 // Main content view
 struct ContentView : View {
     @State private var isPlacementEnabled = false
     @State private var selectedModel: Model?
+    @State private var isSetPosition = false
+    @State private var isContinue = false
     @State private var modelConfirmedForPlacement: Model?
-    
-    private var models: [Model] = {
-       // Dynamically get file names
-        let filemanager =  FileManager.default
-        
-        guard let path = Bundle.main.resourcePath, let files = try? filemanager.contentsOfDirectory(atPath: path) else {
-            return []
-        }
-        
-        var availableModels: [Model] = []
-        for filename in files where filename.hasSuffix("usdz") {
-            let modelName = filename.replacingOccurrences(of: ".usdz", with: "")
-            let model = Model(modelName: modelName)
-            availableModels.append(model)
-        }
-        
-        return availableModels
-    }()
+    @State private var stepFootprint: Model?
+    @State private var isShowSheet = false
+    @State private var isShowStoryButton = false
+    @State private var backups = backupModel
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            ARViewContainer(modelConfirmedForPlacement: self.$modelConfirmedForPlacement)
+            ARViewContainer(modelConfirmedForPlacement: self.$modelConfirmedForPlacement, stepFootprint: $stepFootprint, isShowSheet: $isShowSheet)
+                .sheet(isPresented: $isShowSheet) {
+                    SampleView(selectedModel: $selectedModel, backupModel: $backups)
+                }
             
-            if self.isPlacementEnabled {
-                PlacementButtonsView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, modelConfirmedForPlacement: self.$modelConfirmedForPlacement)
-            } else {
-                ModelPickerView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, models: self.models)
+            if !self.isSetPosition {
+                EmptyButtonsView(isSetPosition: $isSetPosition, selectedModel: $selectedModel, modelConfirmedForPlacement: $modelConfirmedForPlacement)
+                    .padding(.bottom, 40)
+            }
+            
+            else {
+                if !self.isContinue {
+                    startFootprintButton(isContinue: $isContinue)
+                    .padding(.bottom, 40)
+                }
+                else {
+                    if self.isPlacementEnabled && self.isSetPosition {
+                        PlacementButtonsView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, modelConfirmedForPlacement: self.$stepFootprint, isShowStoryButton: $isShowStoryButton)
+                            .padding(.bottom, 40)
+                    }
+                    else {
+                        
+                        if self.isShowStoryButton {
+                            startStoryButton(isShowSheet: $isShowSheet)
+                            .padding(.bottom, 40)
+                        }
+                        else {
+                            ModelPickerView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, models: models)
+                                .padding(.bottom, 40)
+                        }
+                    }
+                }
             }
         }
+        .ignoresSafeArea()
     }
 }
 
 // ARView container
 struct ARViewContainer: UIViewRepresentable {
     @Binding var modelConfirmedForPlacement: Model?
+    @Binding var stepFootprint: Model?
+    @Binding var isShowSheet: Bool
     
     func makeUIView(context: Context) -> ARView {
         
         let arView = CustomARView(frame: .zero)
         
+        // ---------------------------------------------------------
+        RealityUI.enableGestures(.all, on: arView)
+        
+        //        let testAnchor = AnchorEntity(world: [0, 0, -1])
+        //
+        //        let clickySphere = ClickyEntity(
+        //          model: ModelComponent(mesh: .generateBox(size: 0.2), materials: [SimpleMaterial(color: .red, isMetallic: false)])
+        //        ) {
+        //            (clickedObj, atPosition) in
+        //            // In this example we're just assigning the colour of the clickable
+        //            // entity model to a green SimpleMaterial.
+        //            (clickedObj as? HasModel)?.model?.materials = [
+        //                SimpleMaterial(color: .green, isMetallic: false)
+        //            ]
+        //            print("testing 1 2 3")
+        //
+        //
+        //        }
+        
+        //        testAnchor.addChild(clickySphere)
+        //        arView.scene.addAnchor(testAnchor)
+        // ---------------------------------------------------------
+        
         return arView
     }
     
+    
     func updateUIView(_ uiView: ARView, context: Context) {
+        let anchorEntity = AnchorEntity(plane: .any)
         if let model = self.modelConfirmedForPlacement {
             if let modelEntity = model.modelEntity {
                 print("DEBUG - adding model to scene: \(model.modelName)")
-                
-                let anchorEntity = AnchorEntity(plane: .any)
-                anchorEntity.addChild(modelEntity.clone(recursive: true))
-                
+                let clicky = ClickyEntity(model: modelEntity.model!) {
+                    (clickedObj, atPosition) in
+                    // In this example we're just assigning the colour of the clickable
+                    // entity model to a green SimpleMaterial.
+                    print("hello hello")
+                    print(anchorEntity.position)
+                    
+                    self.isShowSheet.toggle()
+                    
+                }
+                anchorEntity.addChild(clicky)
                 uiView.scene.addAnchor(anchorEntity)
-            } else {
-                print("DEBUG - unable to load modelEntity for: \(model.modelName)")
+            }
+            
+            var xX: Float = -0.1
+            var zZ: Float = -0.1
+            
+            var count = 0
+            _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ t in
+                
+                let anchorEntity2 = AnchorEntity(plane: .any)
+                let model2 = backupModel[count]
+                if let modelEntity2 = model2.modelEntity {
+                    print("DEBUG - adding model to scene: \(model2.modelName)")
+                    let clicky2 = ClickyEntity(model: modelEntity2.model!) {
+                        (clickedObj, atPosition) in
+                        // In this example we're just assigning the colour of the clickable
+                        // entity model to a green SimpleMaterial.
+                        print("hello hello")
+                        print(anchorEntity.position)
+                        self.isShowSheet.toggle()
+                        
+                    }
+                    anchorEntity2.transform.translation = [xX, 0, zZ]
+                    anchorEntity2.addChild(clicky2)
+                    uiView.scene.addAnchor(anchorEntity2)
+                }
+                xX = (xX - 0.1) * -1
+                zZ -= 0.2
+                count += 1
+                
+                if count >= 4 {
+                        t.invalidate()
+                }
             }
             
             DispatchQueue.main.async {
                 self.modelConfirmedForPlacement = nil
             }
         }
+        
+        if let secondModel = self.stepFootprint {
+            if let secondEntity = secondModel.modelEntity {
+                print("DEBUG - adding model to scene: \(secondModel.modelName)")
+                let clicky = ClickyEntity(model: secondEntity.model!) {
+                    (clickedObj, atPosition) in
+                    // In this example we're just assigning the colour of the clickable
+                    // entity model to a green SimpleMaterial.
+                    print("hello hello")
+                    print(anchorEntity.position)
+                    
+                    self.isShowSheet.toggle()
+                    
+                }
+                anchorEntity.addChild(clicky)
+                uiView.scene.addAnchor(anchorEntity)
+            }
+            
+            DispatchQueue.main.async {
+                self.stepFootprint = nil
+            }
+        }
+
     }
     
 }
+
+
 
 // Custom ARView with FocusEntity
 class CustomARView: ARView {
@@ -120,6 +247,35 @@ extension CustomARView: FEDelegate {
     }
 }
 
+struct startFootprintButton: View {
+    @Binding var isContinue: Bool
+    var body: some View {
+        Button(action: {
+            self.isContinue = true
+        }) {
+            Text("+ 발자국 남기러 가기")
+                .foregroundColor(.white)
+                .padding()
+        }
+        .background(Capsule().stroke(lineWidth: 2))
+
+    }
+}
+
+struct startStoryButton: View {
+    @Binding var isShowSheet: Bool
+    var body: some View {
+        Button(action: {
+            self.isShowSheet.toggle()
+        }) {
+            Text("스토리 남기러 가기 ->")
+                .foregroundColor(.white)
+                .padding()
+        }
+        .background(Capsule().stroke(lineWidth: 2))
+
+    }
+}
 
 // Picker UI
 struct ModelPickerView: View {
@@ -154,10 +310,41 @@ struct ModelPickerView: View {
 }
 
 // Placement confirm/cancel UI
+struct EmptyButtonsView: View {
+    @Binding var isSetPosition: Bool
+    @Binding var selectedModel: Model?
+    @Binding var modelConfirmedForPlacement: Model?
+    
+    var body: some View {
+        HStack {
+            // Confirmation button
+            Button(action: {
+                print("DEBUG - confirm model placement")
+                self.modelConfirmedForPlacement = models.last
+                resetParameters()
+            }) {
+                Image(systemName: "checkmark")
+                    .frame(width: 50, height: 50)
+                    .font(.title)
+                    .background(Color.white.opacity(0.75))
+                    .cornerRadius(30)
+                    .padding(20)
+            }
+        }
+    }
+    func resetParameters() {
+        self.isSetPosition = true
+        // self.selectedModel = nil
+    }
+}
+
+
+// Placement confirm/cancel UI
 struct PlacementButtonsView: View {
     @Binding var isPlacementEnabled: Bool
     @Binding var selectedModel: Model?
     @Binding var modelConfirmedForPlacement: Model?
+    @Binding var isShowStoryButton: Bool
     
     var body: some View {
         HStack {
@@ -178,7 +365,7 @@ struct PlacementButtonsView: View {
             Button(action: {
                 print("DEBUG - confirm model placement")
                 self.modelConfirmedForPlacement = self.selectedModel
-                self.resetParameters()
+                resetParameters()
             }) {
                 Image(systemName: "checkmark")
                     .frame(width: 50, height: 50)
@@ -192,9 +379,10 @@ struct PlacementButtonsView: View {
     
     func resetParameters() {
         self.isPlacementEnabled = false
-        self.selectedModel = nil
+        self.isShowStoryButton = true
     }
 }
+
 
 #if DEBUG
 struct ContentView_Previews : PreviewProvider {
