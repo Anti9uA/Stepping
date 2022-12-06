@@ -14,10 +14,10 @@
             filePath = "ModelPicker/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
-            landmarkName = "ARViewContainer"
-            landmarkType = "14">
+            startingLineNumber = "143"
+            endingLineNumber = "143"
+            landmarkName = "makeUIView(context:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

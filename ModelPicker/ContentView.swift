@@ -47,42 +47,87 @@ struct ContentView : View {
     @State private var backups = backupModel
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ARViewContainer(modelConfirmedForPlacement: self.$modelConfirmedForPlacement, stepFootprint: $stepFootprint, isShowSheet: $isShowSheet)
-                .sheet(isPresented: $isShowSheet) {
-                    SampleView(selectedModel: $selectedModel, backupModel: $backups)
-                }
-            
-            if !self.isSetPosition {
-                EmptyButtonsView(isSetPosition: $isSetPosition, selectedModel: $selectedModel, modelConfirmedForPlacement: $modelConfirmedForPlacement)
-                    .padding(.bottom, 40)
-            }
-            
-            else {
-                if !self.isContinue {
-                    startFootprintButton(isContinue: $isContinue)
-                    .padding(.bottom, 40)
-                }
-                else {
-                    if self.isPlacementEnabled && self.isSetPosition {
-                        PlacementButtonsView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, modelConfirmedForPlacement: self.$stepFootprint, isShowStoryButton: $isShowStoryButton)
-                            .padding(.bottom, 40)
+        GeometryReader { geo in
+            ZStack(alignment: .bottom) {
+                
+                ARViewContainer(modelConfirmedForPlacement: self.$modelConfirmedForPlacement, stepFootprint: $stepFootprint, isShowSheet: $isShowSheet)
+                    .sheet(isPresented: $isShowSheet) {
+                        SampleView(selectedModel: $selectedModel, backupModel: $backups)
                     }
-                    else {
+                
+                if !self.isSetPosition {
+                    // 초기 좌표 세팅
+                    VStack{
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color.black)
+                                .frame(width: 215, height: 40)
                         
-                        if self.isShowStoryButton {
-                            startStoryButton(isShowSheet: $isShowSheet)
-                            .padding(.bottom, 40)
+                            Text("평평한 바닥을 인식해주세요")
                         }
-                        else {
-                            ModelPickerView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, models: models)
+                        .padding(.top, geo.safeAreaInsets.top + 80)
+                        
+                        Spacer()
+                        
+                        EmptyButtonsView(isSetPosition: $isSetPosition, selectedModel: $selectedModel, modelConfirmedForPlacement: $modelConfirmedForPlacement)
+                    }
+                    .padding(.bottom, 40)
+                }
+                
+                else {
+                    if !self.isContinue {
+                        // 발자국 찍기 시작하기 버튼
+                        VStack {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.black)
+                                    .frame(width: 300, height: 60)
+                                
+                                Text("이 공간에 방문객들의 스토리가 담겨져 있네요! \n발자국을 눌러 확인해보세요!")
+                            }
+                            .padding(.top, geo.safeAreaInsets.top + 80)
+                            
+                            Spacer()
+                            
+                            startFootprintButton(isContinue: $isContinue)
                                 .padding(.bottom, 40)
                         }
                     }
+                    else {
+                        if self.isPlacementEnabled && self.isSetPosition {
+                            VStack{
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(Color.black)
+                                        .frame(width: 283, height: 40)
+                                    
+                                    Text("원하는 모양의 발바닥을 남겨주세요")
+                                }
+                                .padding(.top, geo.safeAreaInsets.top + 80)
+                                
+                                Spacer()
+                                
+                                PlacementButtonsView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, modelConfirmedForPlacement: self.$stepFootprint, isShowStoryButton: $isShowStoryButton)
+                                    .padding(.bottom, 40)
+                            }
+                        }
+                        else {
+                            
+                            if self.isShowStoryButton {
+                                startStoryButton(isShowSheet: $isShowSheet)
+                                .padding(.bottom, 40)
+                                
+                            }
+                            else {
+                                ModelPickerView(isPlacementEnabled: self.$isPlacementEnabled, selectedModel: self.$selectedModel, models: models)
+                                    .padding(.bottom, 40)
+                            }
+                        }
+                    }
                 }
             }
+            .ignoresSafeArea()
         }
-        .ignoresSafeArea()
     }
 }
 
